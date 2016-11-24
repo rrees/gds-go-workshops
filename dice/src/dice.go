@@ -3,6 +3,7 @@ package main
 import "fmt"
 import "net/http"
 import "log"
+import "math/rand"
 
 func main() {
   fmt.Println("Hello world")
@@ -20,8 +21,12 @@ func determineDie(userSuppliedDie string, defaultDie string) string {
   }
 }
 
-func parseDie(diceString string) (int32, error) {
+func parseDie(diceString string) (int, error) {
   return 6, nil
+}
+
+func rollDice(maxValue int) int {
+  return rand.Intn(maxValue) + 1
 }
 
 func diceRoller(w http.ResponseWriter, r *http.Request) {
@@ -37,5 +42,5 @@ func diceRoller(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  fmt.Fprintf(w, "Die value is %d", die)
+  fmt.Fprintf(w, "Die value is %d", rollDice(die))
 }
