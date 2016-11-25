@@ -4,6 +4,7 @@ import "fmt"
 import "net/http"
 import "log"
 import "math/rand"
+import "encoding/json"
 
 func main() {
   fmt.Println("Hello world")
@@ -42,5 +43,29 @@ func diceRoller(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  fmt.Fprintf(w, "Die value is %d", rollDice(die))
+  diceResult := rollDice(die)
+
+  log.Print("Die value is %d", diceResult)
+
+  result := RollResult{dieType, diceResult}
+
+  log.Print(result)
+
+  jsonPayload, error := json.Marshal(result)
+
+  if error != nil {
+    log.Print("Failed to marshal the payload")
+    http.Error(w, fmt.Sprintf("Failed to create the JSON payload %v", error), http.StatusInternalServerError)
+    return
+  }
+
+  log.Print(jsonPayload)
+
+  w.Header().Set("Content-Type", "application/json")
+  w.Write(jsonPayload)
+}
+
+type RollResult struct {
+  Dice string
+  Result int
 }
