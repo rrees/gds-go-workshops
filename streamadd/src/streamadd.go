@@ -13,6 +13,10 @@ func main() {
 
   fmt.Println("Reading stream")
 
+  result:= [3]int{0,0,0}
+
+  idx := 0
+
   for {
     b, err := reader.ReadByte()
 
@@ -24,8 +28,23 @@ func main() {
 
     if b >= 30 && b <= 39 {
       fmt.Println(b)
+      result[idx] = int(b - 30)
+      fmt.Println(sum(result) % 10)
+
+      idx = (idx + 1) % 3
+
     }
   }
 
   fmt.Println("Stream read!")
+}
+
+func sum(a [3]int) int {
+  sum := 0
+
+  for _, v := range a {
+    sum += v
+  }
+
+  return sum
 }
