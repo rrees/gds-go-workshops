@@ -4,7 +4,6 @@ import "fmt"
 import "bufio"
 import "os"
 import "strings"
-import "unicode"
 
 func main() {
 
@@ -12,13 +11,21 @@ func main() {
 
   text, _ := reader.ReadString('\n')
 
-  encoded := strings.Map(rot13, text)
+  encoded := strings.Map(Rot13, text)
 
 
   fmt.Println(encoded)
 
 }
 
-func rot13(r rune) rune {
-  return unicode.ToUpper(r)
+func Rot13(r rune) rune {
+  if(IsAlpha(r)) {
+    return r + 1
+  } else {
+    return r
+  }
+}
+
+func IsAlpha(r rune) bool {
+  return (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z')
 }
